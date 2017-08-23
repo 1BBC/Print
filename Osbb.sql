@@ -65,3 +65,14 @@ CREATE TABLE IF NOT EXISTS `osbb_users_services` (
   UNIQUE KEY `uid_tp` (`uid`, `tp_id`)
 )
   COMMENT = 'Osbb Users Services';
+
+CREATE TABLE IF NOT EXISTS `osbb_users_family` (
+  `id` SMALLINT(5) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `uid` INT(10) UNSIGNED NOT NULL,
+  `name` VARCHAR(40) NOT NULL DEFAULT '',
+  `relationships` VARCHAR(40) NOT NULL DEFAULT '',
+  `birth_date` DATE NOT NULL,
+  `passport_series` VARCHAR(40) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+)
+  COMMENT = 'Osbb Users Family';

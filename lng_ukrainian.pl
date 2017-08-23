@@ -48,4 +48,26 @@ $lang{FIRSTNAME} = "Ім\\'я";
 $lang{LASTNAME} = 'Прізвище';
 $lang{SURNAME} = 'По батькові';
 
+$lang{PANEL_HEADING_2} = "Додаткова інформація";
+$lang{NAME} = "Прізвище, Ім\\'я, по батькові членів сім'ї";
+$lang{RELATIONSHIPS} = 'Відношення до власника, наймача';
+$lang{PASSPORT_SERIES} = 'Серія і № документу';
+$lang{BIRTH_DATE} = 'Дата народж.';
+$lang{PANEL_HEADING} = "Склад сім'ї";
+$lang{NAME_PRINT} = "Уповноважений";
+$lang{PERSONAL_ACCOUNT_PRINT} = "Особовий рахунок";
+$lang{ADDRESS_PRINT} = "Адреса";
+$lang{FLAT_AREA_SERIES} = "Загальна площа квртири";
+$lang{GAS_AREA_SERIES} = "Опалювальна площа квртири";
+$lang{PRIVILEGES_SERIES} = "Наявність пільг";
+$lang{ARREARS_SERIES} = "Заборгованість по квартплаті";
+$lang{ORGANIZATION_NAME_SERIES} = "Назва організації";
+$lang{ORGANIZATION_ADDRESS_SERIES} = "Адреса організації";
+$lang{BANK_DETAILS_SERIES} = "Банківькі реквізити організації";
+$lang{DIRECTOR_SERIES} = "Директор";
+$lang{ACCOUNTANT_SERIES} = "Бухгалтер";
+$lang{PRINT} = "Друк";
+
+
+
 1;

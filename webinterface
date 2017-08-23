@@ -778,6 +778,162 @@ sub osbb_form_address {
 
 =cut
 #**********************************************************
+
+sub osbb_form_print {
+
+  my $table = $html->table(
+    {
+      width   => "100%",
+      caption => "CAPTION_TABLE",
+      title   => [ $lang{NAME_ADD}, $lang{RELATIONSHIPS}, $lang{BIRTH_DATE}, $lang{PASSPORT_SERIES}, "" ],
+      qs      => $pages_qs,
+      ID      => "TABLE_ID",
+      MENU    => "$lang{ADD}:index=$index&add_form=1&$pages_qs:add",
+      export  => 1
+    }
+  );
+
+  my $Osbb_list = $Osbb->users_family_list({ COLS_NAME => 1 });
+  my $count = 0;
+  my $string_for_print;
+
+  foreach my $item (@$Osbb_list) {
+    my $del_button = $html->button("", "index=$index&delete=$item->{id}", { class => "text-danger", ADD_ICON => "glyphicon glyphicon-trash" });
+    $table->addrow($item->{name}, $item->{relationships}, $item->{birth_date}, $item->{passport_series}, $del_button);
+    $count++;
+    $string_for_print .= "<tr><td>$count</td><td>$item->{name}</td><td>$item->{relationships}</td><td>$item->{birth_date}</td><td>$item->{passport_series}</td></tr>";
+  }
+
+  if($FORM{add_form}){
+
+    if ($FORM{NAME}) {
+      $Osbb->users_family_add(
+        {
+          NAME_ADD            => $FORM{NAME},
+          RELATIONSHIPS   => $FORM{RELATIONSHIPS},
+          BIRTH_DATE      => $FORM{BIRTH_DATE},
+          PASSPORT_SERIES => $FORM{PASSPORT_SERIES},
+        }
+      );
+      $html->message("info", "OK", "YOUADDELEMENT");
+    }
+
+    if ($FORM{delete}) {
+    $Osbb->users_family_del($FORM{delete});
+    $html->message("info", "OK", "YOUDELETEELEMENT");
+    }
+
+    $html->tpl_show(_include("osbb_users_family_add", "Osbb"), { DATE => $DATE });
+
+  }
+  else{
+
+    if($FORM{print}){
+
+      $html->tpl_show(
+        _include('osbb_users_family_print', 'Osbb'),
+        {
+          TABLE       => $string_for_print,
+          DATE        => $DATE,
+          SUM_PERSONS => $count,
+          %FORM
+        }
+      );
+
+      return 1;
+    }
+
+    $html->tpl_show(_include("osbb_users_family_add_print", "Osbb"));  
+  }
+
+  print $table->show();
+  
+}
+
+
+
+
+sub osbb_form_print1 {
+
+  my $string_for_print;
+  my $button_to_print = $html->button("PRINT", "index=$index&to_print=yes", { class => "btn btn-primary", ADD_ICON => "" });
+  my $button_to_add = $html->button("ADD", "index=$index", { class => "btn btn-primary", ADD_ICON => "" });
+
+
+  if ($FORM{NAME}) {
+    $Osbb->users_family_add(
+      {
+        NAME            => $FORM{NAME},
+        RELATIONSHIPS   => $FORM{RELATIONSHIPS},
+        BIRTH_DATE      => $FORM{BIRTH_DATE},
+        PASSPORT_SERIES => $FORM{PASSPORT_SERIES},
+      }
+    );
+    $html->message("info", "OK", "YOUADDELEMENT");
+  }
+
+  if ($FORM{delete}) {
+    $Osbb->users_family_del($FORM{delete});
+    $html->message("info", "OK", "YOUDELETEELEMENT");
+  }
+
+  my $table = $html->table(
+    {
+      width   => "100%",
+      caption => "CAPTION_TABLE",
+      title   => [ "NAME", "RELATIONSHIPS", "BIRTH_DATE", "PASSPORT_SERIES", "" ],
+      qs      => $pages_qs,
+      ID      => "TABLE_ID",
+      MENU    => "$lang{ADD}:index=$index&add_form=1&$pages_qs:add",
+      export  => 1
+    }
+  );
+
+  my $Osbb_list = $Osbb->users_family_list({ COLS_NAME => 1 });
+
+  foreach my $item (@$Osbb_list) {
+    my $del_button = $html->button("", "index=$index&delete=$item->{id}", { class => "text-danger", ADD_ICON => "glyphicon glyphicon-trash" });
+    $table->addrow($item->{name}, $item->{relationships}, $item->{birth_date}, $item->{passport_series}, $del_button);
+  }
+
+  my $count = 0;
+  if ($FORM{to_print}) {
+    $html->tpl_show(_include("osbb_users_family_add_print", "Osbb"), { DATE => $DATE });
+    print $table->show();
+    print $button_to_add;
+
+    if ($FORM{print}) {
+      foreach my $item (@$Osbb_list) {
+        $count++;
+        $string_for_print .= "<tr><td>$count</td><td>$item->{name}</td><td>$item->{relationships}</td><td>$item->{birth_date}</td><td>$item->{passport_series}</td></tr>";
+      }
+
+      $html->tpl_show(
+        _include('osbb_users_family_print', 'Osbb'),
+        {
+          PERIOD      => "123456",
+          TABLE       => $string_for_print,
+          DATE        => $DATE,
+          SUM_PERSONS => $count,
+        }
+      );
+      return 1;
+    }
+  }
+  else {
+
+    $html->tpl_show(_include("osbb_users_family_add", "Osbb"), { DATE => $DATE });
+    print $table->show();
+    print $button_to_print;
+  }
+
+}
+
+#**********************************************************
+=head2 _copy_template(DOMAIN_ID)
+
+=cut
+#**********************************************************
 sub _copy_template {
   my ($domain) = @_;
   

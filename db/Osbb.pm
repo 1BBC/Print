@@ -488,3 +488,62 @@ sub ownership_types_list{
 DESTROY { }
 
 1;
+
+#**********************************************************
+=head2 ownership_types_list($attr)
+
+  Arguments:
+    $attr - hash_ref
+
+  Returns:
+    list
+
+=cut
+#**********************************************************
+
+sub users_family_add{
+  my $self = shift;
+  my ($attr) = @_;
+
+  $self->query_add( 'osbb_users_family', $attr );
+
+  return $self;
+}
+
+sub users_family_del{
+  my $self = shift;
+  my ($id) = @_;
+
+  $self->query_del( 'osbb_users_family', { ID => $id } );
+
+  return $self->{result};
+}
+
+sub users_family_list{
+  my $self = shift;
+  my ($attr) = @_;
+
+  my $SORT = ($attr->{SORT}) ? $attr->{SORT} : 1;
+  my $DESC = ($attr->{DESC}) ? $attr->{DESC} : '';
+  #my $PG        = ($attr->{PG})        ? $attr->{PG}             : 0;
+  #my $PAGE_ROWS = ($attr->{PAGE_ROWS}) ? int($attr->{PAGE_ROWS}) : 25;
+
+  # my $WHERE = $self->search_former( $attr, [
+  #     [ 'ID', 'INT', 'id', 1],
+  #     [ 'NAME', 'STR', 'name', 1 ],
+  #     [ 'RELATIONSHIPS', 'int', 'relationships', 1 ],
+  #     [ 'BIRTH_DATE', 'int', 'birth_date', 1 ],
+  #     [ 'PASSPORT_SERRIES', 'int', 'passport_serries', 1 ],      
+  #   ],
+  #   { WHERE => 1,
+  #   }
+  # );
+
+  $self->query2( "SELECT id, name, relationships, birth_date, passport_series
+     FROM osbb_users_family",
+    undef,
+    {COLS_NAME => 1}
+  );
+
+  return $self->{list};
+}
